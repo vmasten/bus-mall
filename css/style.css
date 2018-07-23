@@ -1,2 +1,5 @@
 @import url("reset.css");
 
+* {
+  outline: 1px dotted red;
+}
