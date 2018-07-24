@@ -1,27 +1,48 @@
 @import url("reset.css");
+@import url("https://fonts.googleapis.com/css?family=Roboto");
 
 /* * {
   outline: 1px dotted red;
 } */
 
 body {
+  font-family: 'Roboto', sans-serif;
   display: inline-block;
   width: 1200px;
   margin: 30px;
 }
 
+#image_picker h1 {
+  font-size: 36px;
+  padding-bottom: 20px;
+}
 
 #image1, #image2, #image3 {
   display: inline-block;
   padding: 20px;
-  width: 320px;
-  height: 360px;
   margin-right: 20px;
+  /* border: 2px solid black; */
+}
+
+img {
   border: 2px solid black;
 }
 
-#button1, #button2, #button3 {
+.button {
   position: inline-block;
   padding-top: 10px;
   text-align: center;
+}
+
+h2 {
+  font-size: 28px;
+}
+
+#results {
+  line-height: 1.5em;
+  display: none;
+}
+
+#results-list {
+  padding: 20px;
 }
