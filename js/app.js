@@ -4,9 +4,8 @@ var imgs = ['img/bag.jpg', 'img/banana.jpg', 'img/bathroom.jpg', 'img/boots.jpg'
 var imgObjs = [];
 var globalClicks = 0;
 var container = document.getElementById('image_picker');
-var button1 = document.getElementById('button1');
-var button2 = document.getElementById('button2');
-var button3 = document.getElementById('button3');
+var resultsContainer = document.getElementById('results-list');
+var results = document.getElementById('results');
 
 function ImageTracker(img) {
   this.name = img.split(/[/*.]/)[1]; //took me a while to figure out how to use regex
@@ -20,9 +19,6 @@ var buildTracker = function () {
     imgObjs.push(new ImageTracker(imgs[i]));
   }
 };
-function rando() {
-  return Math.floor(Math.random() * (imgObjs.length));
-}
 
 var render = function(arr) {
   var returnArray = [];
@@ -33,8 +29,10 @@ var render = function(arr) {
     returnArray[i] = arr[randomImage].name;
     imgEl.src = arr[randomImage].path;
     imgEl.id = arr[randomImage].name;
+    arr[randomImage].views++;
     imgAppend.insertBefore(imgEl, imgAppend.firstChild);
     arr.splice(randomImage, 1);
+
   }
   return returnArray;
 };
@@ -78,25 +76,25 @@ var voteHandler = function(event) {
       controlArray = afterDisplay(controlArray);
       break;
     }
-}
+  }
   if (globalClicks > 25) {
     container.removeEventListener('click', voteHandler);
-    console.log('stuff');
-}
+    resultsRender();
+    container.style.display = 'none';
+    results.style.display = 'block';
+  }
+};
+
+var resultsRender = function() {
+  for (var i = 0; i < imgObjs.length; i++) {
+    var resultsEl = document.createElement('li');
+    resultsEl.textContent = imgObjs[i].votes + ' votes for the ' + imgObjs[i].name;
+    resultsContainer.appendChild(resultsEl);
+  }
 };
 
 container.addEventListener('click', voteHandler);
-//   voteHandler('button1');
-// });
-
-// button2.addEventListener('click', function() {
-//   voteHandler('button2');
-// });
-
-// button3.addEventListener('click', function() {
-//   voteHandler('button3');
-// });
-
 buildTracker();
 var controlArray = initDisplay();
+
 
