@@ -6,6 +6,8 @@ var globalClicks = 0;
 var container = document.getElementById('image_picker');
 var resultsContainer = document.getElementById('results-list');
 var results = document.getElementById('results');
+var nameArray = [];
+var votesArray = [];
 
 function ImageTracker(img) {
   this.name = img.split(/[/*.]/)[1]; //took me a while to figure out how to use regex
@@ -82,6 +84,8 @@ var voteHandler = function(event) {
     resultsRender();
     container.style.display = 'none';
     results.style.display = 'block';
+    createChartArrays();
+    drawChart();
   }
 };
 
@@ -91,6 +95,47 @@ var resultsRender = function() {
     resultsEl.textContent = imgObjs[i].votes + ' votes for the ' + imgObjs[i].name;
     resultsContainer.appendChild(resultsEl);
   }
+};
+
+var createChartArrays = function() {
+  for (var i = 0; i < imgObjs.length; i++) {
+    nameArray[i] = imgObjs[i].name;
+    votesArray[i] = imgObjs[i].votes;
+  }
+};
+
+
+var data = {
+  labels: nameArray,
+  datasets: [
+    {
+      data: votesArray,
+      backgroundColor: 'black'
+    },
+  ]
+};
+
+var drawChart = function() {
+var ctx = document.getElementById('results-list').getContext('2d');
+var chart = new Chart(ctx, {
+  type: 'bar',
+  data: data,
+  options: {
+    responsive: false,
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true
+        }
+      }],
+      xAxes: [{
+        ticks: {
+          autoSkip: false
+        }
+      }
+      ]}
+  }
+});
 };
 
 container.addEventListener('click', voteHandler);
