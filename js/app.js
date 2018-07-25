@@ -6,6 +6,8 @@ var globalClicks = 0;
 var container = document.getElementById('image_picker');
 var resultsContainer = document.getElementById('results-list');
 var results = document.getElementById('results');
+var names = [];
+var votes = [];
 
 function ImageTracker(img) {
   this.name = img.split(/[/*.]/)[1]; //took me a while to figure out how to use regex
@@ -13,6 +15,17 @@ function ImageTracker(img) {
   this.votes = 0;
   this.views = 0;
 }
+
+var data = {
+  labels: names,
+  datasets: [
+    {
+      label: '# of votes',
+      data: votes,
+      backgroundColor: '#2c2c2c',
+    },
+  ]
+};
 
 var buildTracker = function () {
   for(var i = 0; i < imgs.length; i++) {
@@ -79,22 +92,49 @@ var voteHandler = function(event) {
   }
   if (globalClicks > 25) {
     container.removeEventListener('click', voteHandler);
-    resultsRender();
     container.style.display = 'none';
     results.style.display = 'block';
+    createChartArrays();
+    drawChart();
   }
 };
 
-var resultsRender = function() {
+var createChartArrays = function() {
   for (var i = 0; i < imgObjs.length; i++) {
-    var resultsEl = document.createElement('li');
-    resultsEl.textContent = imgObjs[i].votes + ' votes for the ' + imgObjs[i].name;
-    resultsContainer.appendChild(resultsEl);
+    names[i] = imgObjs[i].name;
+    votes[i] = imgObjs[i].votes;
   }
 };
 
-container.addEventListener('click', voteHandler);
+var drawChart = function() {
+  var ctx = document.getElementById('results-list').getContext('2d');
+  var chart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+      legend: {
+        labels: {
+          responsive: false,
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                autoSkip: false
+              }
+            }
+            ]}
+        }
+      }
+    }
+  });
+};
+
 buildTracker();
 var controlArray = initDisplay();
+container.addEventListener('click', voteHandler);
 
 
