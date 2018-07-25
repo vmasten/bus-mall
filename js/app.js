@@ -1,11 +1,17 @@
 'use strict';
 
+function UserData() {
+  this.votes = [];
+}
+
 var imgs = ['img/bag.jpg', 'img/banana.jpg', 'img/bathroom.jpg', 'img/boots.jpg', 'img/breakfast.jpg', 'img/bubblegum.jpg', 'img/chair.jpg', 'img/cthulhu.jpg', 'img/dog-duck.jpg', 'img/dragon.jpg', 'img/pen.jpg', 'img/pet-sweep.jpg', 'img/scissors.jpg', 'img/shark.jpg', 'img/sweep.png', 'img/tauntaun.jpg', 'img/unicorn.jpg', 'img/usb.jpg', 'img/water-can.jpg', 'img/wine-glass.jpg'];
 var imgObjs = [];
 var globalClicks = 0;
+
 var container = document.getElementById('image_picker');
 var resultsContainer = document.getElementById('results-list');
 var results = document.getElementById('results');
+
 var names = [];
 var votes = [];
 
@@ -94,6 +100,20 @@ var voteHandler = function(event) {
     container.removeEventListener('click', voteHandler);
     container.style.display = 'none';
     results.style.display = 'block';
+    if (localStorage.getItem('votes') === null) {
+      var userData = storeData();
+      localStorage.setItem('votes', JSON.stringify(userData));
+    }
+    else {
+      var moreData = localStorage.getItem('votes');
+      JSON.parse(moreData);
+      console.log(moreData);
+      for (var i = 0; i < imgObjs.length; i++) {
+        moreData = moreData.votes[i] + imgObjs.votes[i];
+        console.log(moreData);
+        localStorage.setItem('votes', JSON.stringify(moreData));
+      }
+    }
     createChartArrays();
     drawChart();
   }
@@ -104,6 +124,14 @@ var createChartArrays = function() {
     names[i] = imgObjs[i].name;
     votes[i] = imgObjs[i].votes;
   }
+};
+
+var storeData = function() {
+  var data = new UserData;
+  for (var i = 0; i < imgObjs.length; i++) {
+    data.votes.push(imgObjs[i].votes);
+  }
+  return data;
 };
 
 var drawChart = function() {
@@ -134,6 +162,11 @@ var drawChart = function() {
 };
 
 buildTracker();
+// if (localStorage.getItem(userData) === null) {
+//   localStorage.setItem(userData);
+// } else {
+//   localStorage.getItem(userData);
+// }
 var controlArray = initDisplay();
 container.addEventListener('click', voteHandler);
 
