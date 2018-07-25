@@ -3,6 +3,7 @@
 function UserData() {
   this.name = [];
   this.votes = [];
+  this.views = [];
 }
 
 var imgs = ['img/bag.jpg', 'img/banana.jpg', 'img/bathroom.jpg', 'img/boots.jpg', 'img/breakfast.jpg', 'img/bubblegum.jpg', 'img/chair.jpg', 'img/cthulhu.jpg', 'img/dog-duck.jpg', 'img/dragon.jpg', 'img/pen.jpg', 'img/pet-sweep.jpg', 'img/scissors.jpg', 'img/shark.jpg', 'img/sweep.png', 'img/tauntaun.jpg', 'img/unicorn.jpg', 'img/usb.jpg', 'img/water-can.jpg', 'img/wine-glass.jpg'];
@@ -101,26 +102,31 @@ var voteHandler = function(event) {
     container.removeEventListener('click', voteHandler);
     container.style.display = 'none';
     results.style.display = 'block';
-    if (localStorage.getItem('user votes') === null) {
-      var stringifiedData = storeData();
-      localStorage.setItem('user votes', JSON.stringify(stringifiedData));
-    }
-    else {
-      var moreData = JSON.parse(localStorage.getItem('user votes'));
-      for (var i = 0; i < imgObjs.length; i++) {
-        moreData.votes[i] += imgObjs[i].votes;
-      }
-      localStorage.setItem('user votes', JSON.stringify(moreData));
-    }
+    storage();
     createChartArrays();
     drawChart();
   }
 };
 
+var storage = function() {
+  if (localStorage.getItem('user data') === null) {
+    var stringifiedData = storeData();
+    localStorage.setItem('user data', JSON.stringify(stringifiedData));
+  }
+  else {
+    var moreData = JSON.parse(localStorage.getItem('user data'));
+    for (var i = 0; i < imgObjs.length; i++) {
+      moreData.votes[i] += imgObjs[i].votes;
+    }
+    localStorage.setItem('user data', JSON.stringify(moreData));
+  }
+};
+
 var createChartArrays = function() {
-  for (var i = 0; i < imgObjs.length; i++) {
-    names[i] = imgObjs[i].name;
-    votes[i] = imgObjs[i].votes;
+  var userData = JSON.parse(localStorage.getItem('user data'));
+  for (var i = 0; i < userData.name.length; i++) {
+    names[i] = userData.name[i];
+    votes[i] = userData.votes[i];
   }
 };
 
@@ -129,6 +135,7 @@ var storeData = function() {
   for (var i = 0; i < imgObjs.length; i++) {
     data.name.push(imgObjs[i].name);
     data.votes.push(imgObjs[i].votes);
+    data.views.push(imgObjs[i].views);
   }
   return data;
 };
