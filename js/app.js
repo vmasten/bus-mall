@@ -1,6 +1,7 @@
 'use strict';
 
 function UserData() {
+  this.name = [];
   this.votes = [];
 }
 
@@ -100,19 +101,16 @@ var voteHandler = function(event) {
     container.removeEventListener('click', voteHandler);
     container.style.display = 'none';
     results.style.display = 'block';
-    if (localStorage.getItem('votes') === null) {
-      var userData = storeData();
-      localStorage.setItem('votes', JSON.stringify(userData));
+    if (localStorage.getItem('user votes') === null) {
+      var stringifiedData = storeData();
+      localStorage.setItem('user votes', JSON.stringify(stringifiedData));
     }
     else {
-      var moreData = localStorage.getItem('votes');
-      JSON.parse(moreData);
-      console.log(moreData);
+      var moreData = JSON.parse(localStorage.getItem('user votes'));
       for (var i = 0; i < imgObjs.length; i++) {
-        moreData = moreData.votes[i] + imgObjs.votes[i];
-        console.log(moreData);
-        localStorage.setItem('votes', JSON.stringify(moreData));
+        moreData.votes[i] += imgObjs[i].votes;
       }
+      localStorage.setItem('user votes', JSON.stringify(moreData));
     }
     createChartArrays();
     drawChart();
@@ -129,6 +127,7 @@ var createChartArrays = function() {
 var storeData = function() {
   var data = new UserData;
   for (var i = 0; i < imgObjs.length; i++) {
+    data.name.push(imgObjs[i].name);
     data.votes.push(imgObjs[i].votes);
   }
   return data;
@@ -162,12 +161,5 @@ var drawChart = function() {
 };
 
 buildTracker();
-// if (localStorage.getItem(userData) === null) {
-//   localStorage.setItem(userData);
-// } else {
-//   localStorage.getItem(userData);
-// }
 var controlArray = initDisplay();
 container.addEventListener('click', voteHandler);
-
-
