@@ -90,7 +90,7 @@ var voteHandler = function(event) {
       break;
     }
   }
-  if (globalClicks > 25) {
+  if (globalClicks > 24) {
     container.removeEventListener('click', voteHandler);
     container.style.display = 'none';
     results.style.display = 'block';
