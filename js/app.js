@@ -1,5 +1,6 @@
 'use strict';
 
+//Used to store relevant data locally
 function UserData() {
   this.name = [];
   this.votes = [];
@@ -24,6 +25,7 @@ function ImageTracker(img) {
   this.views = 0;
 }
 
+//used by Chart.js
 var data = {
   labels: names,
   datasets: [
@@ -47,6 +49,7 @@ var render = function(arr) {
     var imgAppend = document.getElementById('image' + (i + 1)); //genuinely surprised this worked
     var imgEl = document.createElement('img');
     var randomImage = Math.floor(Math.random() * (arr.length));
+
     returnArray[i] = arr[randomImage].name;
     imgEl.src = arr[randomImage].path;
     imgEl.id = arr[randomImage].name;
@@ -58,14 +61,15 @@ var render = function(arr) {
   return returnArray;
 };
 
+//handles the initial display of images
 var initDisplay = function() {
-
   var pickerArray = []; //objects are removed as they're displayed
   pickerArray = imgObjs.slice();
   var arr = render(pickerArray);
   return arr;
 };
 
+//after initDisplay, rerenders images
 var afterDisplay = function(nameArray) {
   var pickerArray = []; //objects are removed as they're displayed
   var arr = []; //holds three elements to ensure no repeats
@@ -81,12 +85,14 @@ var afterDisplay = function(nameArray) {
   return arr;
 };
 
+//clears the screen between image renders
 var clearScreen = function() {
   document.getElementById('image1').firstChild.remove();
   document.getElementById('image2').firstChild.remove();
   document.getElementById('image3').firstChild.remove();
 };
 
+//an event handler that also displays the chart once all votes are in
 var voteHandler = function(event) {
   var vote = event.target.parentNode.parentNode.firstChild.id; //not exactly ideal, but it works
   for (var i = 0; i < imgObjs.length; i++) {
@@ -108,6 +114,7 @@ var voteHandler = function(event) {
   }
 };
 
+//stores/retrieves data to/from local storage
 var storage = function() {
   if (localStorage.getItem('user data') === null) {
     var stringifiedData = storeData();
@@ -122,6 +129,7 @@ var storage = function() {
   }
 };
 
+//forms data to be displayed by Chart.js using local storage
 var createChartArrays = function() {
   var userData = JSON.parse(localStorage.getItem('user data'));
   for (var i = 0; i < userData.name.length; i++) {
@@ -130,6 +138,7 @@ var createChartArrays = function() {
   }
 };
 
+//forms data for local storage
 var storeData = function() {
   var data = new UserData;
   for (var i = 0; i < imgObjs.length; i++) {
@@ -140,6 +149,7 @@ var storeData = function() {
   return data;
 };
 
+//uses Chart.js to draw a chart of how many times each image received votes
 var drawChart = function() {
   var ctx = document.getElementById('results-list').getContext('2d');
   var chart = new Chart(ctx, {
