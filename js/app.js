@@ -111,6 +111,7 @@ var voteHandler = function(event) {
     storage();
     createChartArrays();
     drawChart();
+    drawChart2();
   }
 };
 
@@ -152,6 +153,33 @@ var storeData = function() {
 //uses Chart.js to draw a chart of how many times each image received votes
 var drawChart = function() {
   var ctx = document.getElementById('results-list').getContext('2d');
+  var chart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: {
+      legend: {
+        labels: {
+          responsive: false,
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }],
+            xAxes: [{
+              ticks: {
+                autoSkip: false
+              }
+            }
+            ]}
+        }
+      }
+    }
+  });
+};
+
+var drawChart2 = function() {
+  var ctx = document.getElementById('views-chart').getContext('2d');
   var chart = new Chart(ctx, {
     type: 'bar',
     data: data,

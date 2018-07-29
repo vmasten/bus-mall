@@ -39,9 +39,18 @@ h2 {
 }
 
 #results {
+  width: 850px;
   display: none;
 }
 
-#results-list {
+#results-list #views-chart {
   padding: 20px;
+}
+
+.chart-left {
+  float: left;
+}
+
+.chart-right {
+  float: right;
 }
