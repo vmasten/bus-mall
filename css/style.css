@@ -1,5 +1,5 @@
 @import url("reset.css");
-@import url("https://fonts.googleapis.com/css?family=Roboto");
+@import url("https://fonts.googleapis.com/css?family=Roboto|Montserrat:800");
 
 /* * {
   outline: 1px dotted red;
@@ -8,20 +8,28 @@
 body {
   font-family: 'Roboto', sans-serif;
   display: inline-block;
+  background-color: blue;
+  color: white;
   width: 1200px;
   margin: 30px;
 }
 
+.title {
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  font-size: 60px;
+  margin-bottom: 40px;
+}
+
 #image_picker h1 {
-  font-size: 36px;
-  padding-bottom: 20px;
+  font-size: 32px;
+  padding: 0px 0px 20px 20px;
 }
 
 #image1, #image2, #image3 {
   display: inline-block;
   padding: 20px;
   margin-right: 20px;
-  /* border: 2px solid black; */
 }
 
 img {
@@ -39,9 +47,14 @@ h2 {
 }
 
 #results {
+  width: 1150px;
   display: none;
 }
 
-#results-list {
-  padding: 20px;
+.chart-left {
+  float: left;
+}
+
+.chart-right {
+  float: right;
 }
