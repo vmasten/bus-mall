@@ -17,6 +17,7 @@ var results = document.getElementById('results');
 
 var names = [];
 var votes = [];
+var views = [];
 
 function ImageTracker(img) {
   this.name = img.split(/[/*.]/)[1]; //took me a while to figure out how to use regex
@@ -26,13 +27,26 @@ function ImageTracker(img) {
 }
 
 //used by Chart.js
-var data = {
+var voteData = {
   labels: names,
   datasets: [
     {
       label: '# of votes',
       data: votes,
       backgroundColor: '#2c2c2c',
+      hoverBackgroundColor: 'blue',
+    },
+  ]
+};
+
+var viewData = {
+  labels: names,
+  datasets: [
+    {
+      label: '# of views',
+      data: views,
+      backgroundColor: '#2c2c2c',
+      hoverBackgroundColor: 'blue',
     },
   ]
 };
@@ -107,11 +121,13 @@ var voteHandler = function(event) {
   if (globalClicks > 24) {
     container.removeEventListener('click', voteHandler);
     container.style.display = 'none';
+    document.body.style.backgroundColor = 'white';
+    document.body.style.color = 'black';
     results.style.display = 'block';
     storage();
     createChartArrays();
-    drawChart();
-    drawChart2();
+    drawVotesChart();
+    drawViewsChart();
   }
 };
 
@@ -125,6 +141,7 @@ var storage = function() {
     var moreData = JSON.parse(localStorage.getItem('user data'));
     for (var i = 0; i < imgObjs.length; i++) {
       moreData.votes[i] += imgObjs[i].votes;
+      moreData.views[i] += imgObjs[i].views;
     }
     localStorage.setItem('user data', JSON.stringify(moreData));
   }
@@ -136,6 +153,7 @@ var createChartArrays = function() {
   for (var i = 0; i < userData.name.length; i++) {
     names[i] = userData.name[i];
     votes[i] = userData.votes[i];
+    views[i] = userData.views[i];
   }
 };
 
@@ -151,11 +169,11 @@ var storeData = function() {
 };
 
 //uses Chart.js to draw a chart of how many times each image received votes
-var drawChart = function() {
+var drawVotesChart = function() {
   var ctx = document.getElementById('results-list').getContext('2d');
   var chart = new Chart(ctx, {
     type: 'bar',
-    data: data,
+    data: voteData,
     options: {
       legend: {
         labels: {
@@ -178,11 +196,11 @@ var drawChart = function() {
   });
 };
 
-var drawChart2 = function() {
+var drawViewsChart = function() {
   var ctx = document.getElementById('views-chart').getContext('2d');
   var chart = new Chart(ctx, {
-    type: 'bar',
-    data: data,
+    type: 'polarArea',
+    data: viewData,
     options: {
       legend: {
         labels: {
